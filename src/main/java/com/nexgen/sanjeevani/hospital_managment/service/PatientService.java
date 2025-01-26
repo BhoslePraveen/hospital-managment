@@ -1,5 +1,6 @@
 package com.nexgen.sanjeevani.hospital_managment.service;
 
+import com.nexgen.sanjeevani.hospital_managment.dto.PatientDto;
 import com.nexgen.sanjeevani.hospital_managment.model.Appointment;
 import com.nexgen.sanjeevani.hospital_managment.model.Patient;
 
@@ -15,13 +16,13 @@ import java.util.List;
  */
 public interface PatientService {
     //Register
-    String registerPatient(String userName, String password);
+    String registerPatient(PatientDto patient);
 
     //Login
     Patient loginPatient(String userName, String password);
 
     //Update
-    Patient updatePatient(Patient patient);
+    PatientDto updatePatient(PatientDto patient);
 
     //Book Appointment
     Appointment addAppointment(Appointment appointment,Long patientId);
