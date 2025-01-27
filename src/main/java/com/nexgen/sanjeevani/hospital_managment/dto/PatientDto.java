@@ -13,6 +13,8 @@ import org.hibernate.validator.constraints.Length;
 @Setter
 public class PatientDto {
 
+    private Long id;
+
     @NotNull(message = "UserName cannot be null")
     @Length(min = 4, max = 10, message = "UserName must be between 3 and 15 characters")
     private String userName;

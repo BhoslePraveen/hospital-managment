@@ -1,8 +1,10 @@
 package com.nexgen.sanjeevani.hospital_managment.service;
 
+import com.nexgen.sanjeevani.hospital_managment.dto.AppointmentRequestDto;
+import com.nexgen.sanjeevani.hospital_managment.dto.AppointmentResponseDto;
 import com.nexgen.sanjeevani.hospital_managment.dto.PatientDto;
+import com.nexgen.sanjeevani.hospital_managment.dto.PatientResponseDto;
 import com.nexgen.sanjeevani.hospital_managment.model.Appointment;
-import com.nexgen.sanjeevani.hospital_managment.model.Patient;
 
 import java.util.List;
 
@@ -19,13 +21,13 @@ public interface PatientService {
     String registerPatient(PatientDto patient);
 
     //Login
-    Patient loginPatient(String userName, String password);
+    PatientResponseDto loginPatient(String userName, String password);
 
     //Update
-    PatientDto updatePatient(PatientDto patient);
+    PatientResponseDto updatePatient(PatientDto patient);
 
     //Book Appointment
-    Appointment addAppointment(Appointment appointment,Long patientId);
+    AppointmentResponseDto addAppointment(AppointmentRequestDto appointment, Long patientId);
 
     //Get All Appointment
     List<Appointment> getAllAppointments(Long patientId);
@@ -37,5 +39,5 @@ public interface PatientService {
     void deleteAppointment(String appointmentId);
 
     //Update Appointment
-    Appointment updateAppointment(Appointment appointment ,Long patientId);
+    AppointmentResponseDto updateAppointment(AppointmentRequestDto appointment ,Long patientId);
 }

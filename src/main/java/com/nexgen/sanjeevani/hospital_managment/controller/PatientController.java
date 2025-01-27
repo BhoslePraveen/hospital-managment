@@ -1,6 +1,9 @@
 package com.nexgen.sanjeevani.hospital_managment.controller;
 
+import com.nexgen.sanjeevani.hospital_managment.dto.AppointmentRequestDto;
+import com.nexgen.sanjeevani.hospital_managment.dto.AppointmentResponseDto;
 import com.nexgen.sanjeevani.hospital_managment.dto.PatientDto;
+import com.nexgen.sanjeevani.hospital_managment.dto.PatientResponseDto;
 import com.nexgen.sanjeevani.hospital_managment.model.Patient;
 import com.nexgen.sanjeevani.hospital_managment.service.PatientService;
 import jakarta.validation.Valid;
@@ -30,8 +33,18 @@ public class PatientController {
     }
 
     @GetMapping("/login")
-    public ResponseEntity<Patient> loginPatient(@RequestParam String userName, @RequestParam String password){
-        return ResponseEntity.ok(patientService.loginPatient(userName,password));
+    public ResponseEntity<PatientResponseDto> loginPatient(@RequestParam String userName, @RequestParam String password) {
+        return ResponseEntity.ok(patientService.loginPatient(userName, password));
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<PatientResponseDto> updatePatient(@RequestBody @Valid PatientDto patient){
+        return ResponseEntity.ok(patientService.updatePatient(patient));
+    }
+
+    @PostMapping("/book")
+    public ResponseEntity<AppointmentResponseDto> addAppointment(@RequestBody @Valid AppointmentRequestDto appointment, @RequestParam Long patientId){
+        return ResponseEntity.ok(patientService.addAppointment(appointment, patientId));
     }
 
 }

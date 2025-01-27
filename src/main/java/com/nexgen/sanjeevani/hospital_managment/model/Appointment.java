@@ -20,8 +20,14 @@ public class Appointment extends AuditStamp {
     @Column(name = "status")
     private String appointmentStatus;
 
-    @Column(name = "app_date")
-    private LocalDateTime appointmentDate;
+    @Column(name = "request_app_date")
+    private LocalDateTime requestedAppointmentDate;
+
+    @Column(name = "scheduled_app_date")
+    private LocalDateTime scheduledAppointmentDate;
+
+    @Column(name = "speciality")
+    private String speciality;
 
     @ManyToOne
     private Doctor doctor;
