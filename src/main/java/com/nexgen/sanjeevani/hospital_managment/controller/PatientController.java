@@ -4,12 +4,15 @@ import com.nexgen.sanjeevani.hospital_managment.dto.AppointmentRequestDto;
 import com.nexgen.sanjeevani.hospital_managment.dto.AppointmentResponseDto;
 import com.nexgen.sanjeevani.hospital_managment.dto.PatientDto;
 import com.nexgen.sanjeevani.hospital_managment.dto.PatientResponseDto;
+import com.nexgen.sanjeevani.hospital_managment.model.Appointment;
 import com.nexgen.sanjeevani.hospital_managment.model.Patient;
 import com.nexgen.sanjeevani.hospital_managment.service.PatientService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /*
 --> Scope of this class <--
@@ -45,6 +48,21 @@ public class PatientController {
     @PostMapping("/book")
     public ResponseEntity<AppointmentResponseDto> addAppointment(@RequestBody @Valid AppointmentRequestDto appointment, @RequestParam Long patientId){
         return ResponseEntity.ok(patientService.addAppointment(appointment, patientId));
+    }
+
+    @GetMapping("/appointments/{id}")
+    public ResponseEntity<List<AppointmentResponseDto>> getAllAppointments(@PathVariable (name = "id") Long patientId){
+        return ResponseEntity.ok(patientService.getAllAppointments(patientId));
+    }
+
+    @GetMapping("/appointments/{id}/details")
+    public ResponseEntity<AppointmentResponseDto> getAppointment(@PathVariable (name = "id") Long appointmentId){
+        return ResponseEntity.ok(patientService.getAppointment(appointmentId));
+    }
+
+    @DeleteMapping("/appointments/{id}")
+    public void deleteAppointment(@PathVariable (name = "id") Long appointmentId){
+        patientService.deleteAppointment(appointmentId);
     }
 
 }

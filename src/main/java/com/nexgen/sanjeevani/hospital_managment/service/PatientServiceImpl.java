@@ -114,6 +114,7 @@ public class PatientServiceImpl implements PatientService {
         Patient patient = patientRepository.findById(patientId).orElseThrow(() -> new RuntimeException("Patient Not Found"));
 
         //Creating a dummy doctor with sepality as GENERAL
+        //TODO : Get the doctor details from the Repo using the speciality
         Doctor doctor = new Doctor();
         doctor.setUserName("Doctor1");
         doctor.setPassword("Doc@1234");
@@ -137,6 +138,7 @@ public class PatientServiceImpl implements PatientService {
             Symtom symtom1 = new Symtom();
             symtom1.setDescription(symtom.getDescription());
             symtom1.setSeverity(symtom.getSeverity());
+            symtom1.setAppointment(appointmentEntity);
             symtomList.add(symtom1);
         }
 
@@ -144,6 +146,12 @@ public class PatientServiceImpl implements PatientService {
 
         Appointment savedAppointment = appointmentRepository.save(appointmentEntity);
 
+        AppointmentResponseDto appointmentResponseDto = getAppointmentResponseDto(savedAppointment);
+
+        return appointmentResponseDto;
+    }
+
+    private static AppointmentResponseDto getAppointmentResponseDto(Appointment savedAppointment) {
         AppointmentResponseDto appointmentResponseDto = new AppointmentResponseDto();
         appointmentResponseDto.setId(savedAppointment.getAppointmentId());
         appointmentResponseDto.setAppointmentStatus(savedAppointment.getAppointmentStatus());
@@ -161,23 +169,33 @@ public class PatientServiceImpl implements PatientService {
         }
 
         appointmentResponseDto.setSymtoms(symtomDtoList);
-
         return appointmentResponseDto;
     }
 
     @Override
-    public List<Appointment> getAllAppointments(Long patientId) {
-        return List.of();
+    public List<AppointmentResponseDto> getAllAppointments(Long patientId) {
+        List<Appointment> appointments = appointmentRepository.findByPatientId(patientId);
+        List<AppointmentResponseDto> appointmentResponseDtoList = new ArrayList<>();
+        for(Appointment appointment: appointments){
+            AppointmentResponseDto appointmentResponseDto = getAppointmentResponseDto(appointment);
+            appointmentResponseDtoList.add(appointmentResponseDto);
+        }
+        return appointmentResponseDtoList;
     }
 
     @Override
-    public Appointment getAppointment(String appointmentId) {
-        return null;
+    public AppointmentResponseDto getAppointment(Long appointmentId) {
+        Appointment appointment = appointmentRepository.findById(appointmentId).orElse(null);
+        if(appointment != null){
+            return getAppointmentResponseDto(appointment);
+        } else {
+            throw new RuntimeException("Appointment Not Found");
+        }
     }
 
     @Override
-    public void deleteAppointment(String appointmentId) {
-
+    public void deleteAppointment(Long appointmentId) {
+         appointmentRepository.deleteById(appointmentId);
     }
 
     @Override

@@ -35,6 +35,7 @@ public class Appointment extends AuditStamp {
     @OneToOne
     private Patient patient;
 
-    @OneToMany(mappedBy = "appointment" )
+    //Cascase is used to transfer the parent class action i.e save to save and delete to delete
+    @OneToMany(mappedBy = "appointment",cascade = CascadeType.ALL )
     private List<Symtom> symtoms;
 }

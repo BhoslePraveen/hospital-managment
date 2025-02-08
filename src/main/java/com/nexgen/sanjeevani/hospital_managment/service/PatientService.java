@@ -30,13 +30,13 @@ public interface PatientService {
     AppointmentResponseDto addAppointment(AppointmentRequestDto appointment, Long patientId);
 
     //Get All Appointment
-    List<Appointment> getAllAppointments(Long patientId);
+    List<AppointmentResponseDto> getAllAppointments(Long patientId);
 
     //Get Appointment
-    Appointment getAppointment(String appointmentId);
+    AppointmentResponseDto getAppointment(Long appointmentId);
 
     //Delete Appointment
-    void deleteAppointment(String appointmentId);
+    void deleteAppointment(Long appointmentId);
 
     //Update Appointment
     AppointmentResponseDto updateAppointment(AppointmentRequestDto appointment ,Long patientId);

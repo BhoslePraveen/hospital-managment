@@ -20,5 +20,6 @@ public class Symtom extends AuditStamp {
     private String severity;
 
     @ManyToOne
+    @JoinColumn(name = "appointment_id")
     private Appointment appointment;
 }
