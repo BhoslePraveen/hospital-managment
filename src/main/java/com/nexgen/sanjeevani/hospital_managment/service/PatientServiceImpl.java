@@ -63,7 +63,7 @@ public class PatientServiceImpl implements PatientService {
                 Patient patientEntity = patient.get();
                 PatientResponseDto patientResponseDto = new PatientResponseDto();
                 patientResponseDto.setId(patientEntity.getPatientId());
-                patientResponseDto.setUserName(patientEntity.getUserName());
+                patientResponseDto.setUserName(patientEntity.getUsername());
                 patientResponseDto.setFirstName(patientEntity.getFirstName());
                 patientResponseDto.setLastName(patientEntity.getLastName());
                 patientResponseDto.setEmail(patientEntity.getEmail());
@@ -97,7 +97,7 @@ public class PatientServiceImpl implements PatientService {
         //Entity to dto
         PatientResponseDto patientResponseDto = new PatientResponseDto();
         patientResponseDto.setId(savedPatientData.getPatientId());
-        patientResponseDto.setUserName(savedPatientData.getUserName());
+        patientResponseDto.setUserName(savedPatientData.getUsername());
         patientResponseDto.setFirstName(savedPatientData.getFirstName());
         patientResponseDto.setLastName(savedPatientData.getLastName());
         patientResponseDto.setEmail(savedPatientData.getEmail());
