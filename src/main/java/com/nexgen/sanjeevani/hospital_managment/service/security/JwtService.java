@@ -2,17 +2,14 @@ package com.nexgen.sanjeevani.hospital_managment.service.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.security.Key;
+import java.time.Instant;
 import java.util.Date;
-import java.util.Map;
-import java.util.function.Function;
 
 @Service
 @Slf4j
@@ -24,45 +21,37 @@ public class JwtService {
     private long tokenExpirationTime;
 
     //Generate the Token
-    public String generateToken(Map<String, Object> claims, UserDetails userDetails ,long tokenExpirationTime){
-       return Jwts.builder()
-               .setClaims(claims)
-               .setSubject(userDetails.getUsername())
-               .setIssuedAt(java.util.Date.from(java.time.Instant.now()))
-               .setExpiration(java.util.Date.from(java.time.Instant.now().plusMillis(tokenExpirationTime)))
-               .signWith(io.jsonwebtoken.SignatureAlgorithm.HS512,secretKey)
-               .compact();
+    public String generateToken(UserDetails userDetails) {
+        return Jwts.builder()
+                .subject(userDetails.getUsername())
+                .issuedAt(new Date())
+                .expiration(new Date(Instant.now().getEpochSecond() + tokenExpirationTime))
+                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .compact();
     }
 
-    //Get the expiry time
-    public Date getTokenExpirationTime(String token) {
-        return extractClaims(token, Claims::getExpiration);
+    // Extract the claims
+    public Claims extractClaims(String token) {
+        return Jwts.parser()
+                .setSigningKey(secretKey)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 
-    //Check for Expiry for time
-    public boolean isTokenExpired(String token){
-        return getTokenExpirationTime(token).before(new Date());
+    // extract user-name from token
+    public String extractUserName(String token) {
+        return extractClaims(token).getSubject();
     }
 
-    //Check for valid token
-    public boolean validateToken(String token, UserDetails userDetails){
-        final String username = extractClaims(token, Claims::getSubject);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    // check if token is expired
+    public boolean isTokenExpired(String token) {
+        return extractClaims(token).getExpiration().before(new Date());
     }
 
-    //Extract claims
-    public <T> T extractClaims(String token, Function<Claims, T> claimsResolver){
-        final Claims claims = extractAllClaims(token);
-        return claimsResolver.apply(claims);
-    }
-
-    private Claims extractAllClaims(String token) {
-        return Jwts.parser().setSigningKey(getSignInKey()).build().parseClaimsJws(token).getBody();
-    }
-
-    public Key getSignInKey(){
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
-        return Keys.hmacShaKeyFor(keyBytes);
+    // check if the token is valid
+    public boolean validateToken(String token, UserDetails userDetails) {
+        return extractUserName(token).equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
 
 }
