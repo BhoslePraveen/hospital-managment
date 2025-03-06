@@ -12,6 +12,7 @@ import com.nexgen.sanjeevani.hospital_managment.model.Patient;
 import com.nexgen.sanjeevani.hospital_managment.repository.AppointmentRepository;
 import com.nexgen.sanjeevani.hospital_managment.repository.DoctorRepository;
 import com.nexgen.sanjeevani.hospital_managment.repository.PatientRepository;
+import com.nexgen.sanjeevani.hospital_managment.service.security.JwtService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,8 @@ public class PatientServiceImpl implements PatientService {
     private DoctorRepository doctorRepository;
     @Autowired
     private AppointmentRepository appointmentRepository;
+    @Autowired
+    private JwtService jwtService;
 
     @Override
     public String registerPatient(PatientDto patient) {
@@ -69,6 +72,7 @@ public class PatientServiceImpl implements PatientService {
                 patientResponseDto.setEmail(patientEntity.getEmail());
                 patientResponseDto.setPhone(patientEntity.getPhone());
                 patientResponseDto.setGender(Gender.valueOf(patientEntity.getGender()));
+                patientResponseDto.setToken(jwtService.generateToken(patientEntity));
                 return patientResponseDto;
             } else {
                 throw new RuntimeException("Invalid Password");

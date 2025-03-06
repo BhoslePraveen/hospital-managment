@@ -17,7 +17,7 @@ import java.util.ArrayList;
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
-    PatientRepository patientRepository;
+    private final PatientRepository patientRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
