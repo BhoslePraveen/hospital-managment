@@ -1,6 +1,7 @@
 package com.nexgen.sanjeevani.hospital_managment.service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import com.nexgen.sanjeevani.hospital_managment.dto.PatientResponseDto;
 import com.nexgen.sanjeevani.hospital_managment.enums.Gender;
@@ -92,5 +93,37 @@ public class PatientServiceImplTest {
         Assertions.assertEquals(101L,result.getId());
 
     }
+
+    @Test
+    public void testLoginPatient() {
+        // Given
+        String userName = "vikas101";
+        String password = "123abc";
+
+        Patient patient = new Patient();
+        patient.setPatientId(101L);
+        patient.setUserName("vikas101");
+        patient.setPassword("123abc");
+        patient.setFirstName("vikas");
+        patient.setLastName("bhatia");
+        patient.setEmail("vikas@gmail.com");
+        patient.setPhone("1234567890");
+        patient.setGender("MALE");
+
+        Mockito.when(patientRepository.findByUserName(Mockito.any(Patient.class))).thenReturn(patient);
+
+        //When
+        PatientResponseDto response = patientService.loginPatient(userName, password);
+
+        //Then
+        Assertions.assertNotNull(response);
+        Assertions.assertEquals("vikas", response.getFirstName());
+        Assertions.assertEquals(101L, response.getId());
+    }
+
+    @Test
+    public void testAddAppointment (){
+
+    }
+
 }
-#test
